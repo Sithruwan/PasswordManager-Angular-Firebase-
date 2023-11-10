@@ -1,0 +1,61 @@
+<app-navbar></app-navbar>
+
+
+<div class="container mx-auto my-16">
+  <h1 class="text-5xl mt-0 mb-5">My Password Manager</h1>
+  <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid amet animi consequuntur explicabo facere harum in iure laboriosam libero minus, molestiae molestias, mollitia nesciunt non placeat totam vel veritatis voluptatum!</p>
+  <button (click)="OnAddNewBtn()" class="mb-5 mx-0.5 px-5 py-5 text-sm bg-gray-900 text-white shadow rounded-md">Add New Site</button>
+<!--Alert-card-->
+
+  <div *ngIf="isSuccess" class=" border border-gray-400 text-gray-700 px-4 py-3 rounded relative" role="alert" [ngClass]="{'bg-green-200': isSuccess , 'bg-red-200': !isSuccess }" >
+    <strong class="font-bold">{{alertMessage}}</strong>
+<!--    <span class="block sm:inline">Something seriously bad happened.</span>-->
+    <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+    <svg class="fill-current h-6 w-6 text-gray-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+  </span>
+  </div>
+
+<!--  Add site form-->
+  <div class="px-20 py-10 mb-10 my-5 border-4 border-gray-900">
+    <h2 class="text-3xl text-center">{{formState}} site</h2>
+    <p class="text-center">You can {{formState}} site using bellow form</p>
+    <form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+      <div class="flex flex-col">
+        <label   class="text-lg font-medium mb-2">Site Name</label>
+        <input [(ngModel)]="siteName" type="text" name="siteName" class="border-2 border-gray-900 p-2 rounded-lg w-full">
+      </div>
+      <div class="flex flex-col">
+        <label   class="text-lg font-medium mb-2">Site URL</label>
+        <input [(ngModel)]="siteURL" type="text" name="siteURL" class="border-2 border-gray-900 p-2 rounded-lg w-full">
+      </div>
+      <div class="flex flex-col">
+        <label   class="text-lg font-medium mb-2">Site Image URL</label>
+        <input [(ngModel)]="siteImgURL" type="text" name="siteImgURL" class="border-2 border-gray-900 p-2 rounded-lg w-full">
+      </div>
+      <button type="submit" class="mt-10 mx-0.5 px-5 py-3 text-sm bg-gray-900 text-white shadow rounded-md"> {{formState}} site </button>
+      <button type="button" (click)="onCancel(f)" class="mt-10 mx-0.5 px-5 py-3 text-sm border-2 border-gray-900 text-gray-900 shadow rounded-md"> Cancel </button>
+
+    </form>
+
+  </div>
+
+<!--  site-Card-->
+  <div class="flex flex-wrap ">
+    <div *ngFor="let site of allsites | async" class="max-w-sm rounded overflow-hidden shadow-lg border-4 border-gray-900 mb-4  w-1/4">
+      <img class="w-full h-1/2" [src]="site.siteImgURL" alt="Sunset in the mountains">
+      <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2">{{site.siteName}}</div>
+        <p class="w-60  px-3 bg-blue-200 text-blue-800 rounded-lg text-sm">
+          {{site.siteURL}}
+        </p>
+      </div>
+      <div class="px-4 pt-4 pb-2 flex flex-row">
+        <button routerLink="/password-list" [queryParams]="{id:site.id, siteName:site.siteName,siteURL:site.siteURL,siteImgURL:site.siteImgURL}" type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">Add new password</button>
+        <button (click)="editSite(site.siteName,site.siteURL,site.siteImgURL,site.id)" type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Edit</button>
+        <button (click)="deleteSite(site.id)" type="button" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+      </div>
+    </div>
+  </div>
+
+
+</div>
